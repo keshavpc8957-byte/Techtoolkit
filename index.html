@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ToolHub - Multi Tool Directory</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">ToolHub</div>
+
+
+<nav>
+
+<!-- <a href="#">Home</a>
+<a href="#">Categories</a>
+<a href="#">Top Tools</a> -->
+
+</nav>
+
+<div class="actions">
+
+<button id="darkToggle">
+<i class="fa fa-moon"></i>
+</button>
+</div>
+
+<div class="auth">
+
+<button id="googleLogin">
+Sign in with Google
+</button>
+
+<button id="logoutBtn" style="display:none">
+Logout
+</button>
+
+<div id="userBox"></div>
+
+</div>
+
+</header>
+
+
+<section class="hero">
+  
+  <h4>Tool Kit - All Online Tools in One Place.</h4>
+  <h1>Find The Best Tools For Everything</h1>
+
+<input type="text" id="searchInput" placeholder="Search tools...">
+
+</section>
+
+<section class="filters">
+
+<select id="categoryFilter">
+
+<option value="all">All Categories</option>
+<option value="AI">AI Tools</option>
+<option value="PDF">PDF Tools</option>
+<option value="Image">Image Tools</option>
+<option value="Developer">Developer Tools</option>
+
+</select>
+
+<select id="sortTools">
+
+<option value="default">Sort</option>
+<option value="rating">Highest Rating</option>
+
+</select>
+
+</section>
+
+<section class="tools-grid" id="toolsGrid">
+
+
+<!-- TOOL CARD -->
+
+<div class="tool-card" data-category="AI" data-rating="4.8">
+
+<img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
+
+<h3>ChatGPT</h3>
+
+<p class="category">AI Tools</p>
+
+<div class="rating">⭐⭐⭐⭐⭐</div>
+
+<p>AI assistant for writing, coding and research.</p>
+
+<a href="https://chat.openai.com" target="_blank" class="tool-btn">
+View Tool
+</a>
+
+</div>
+
+
+<!-- TOOL CARD -->
+
+<div class="tool-card" data-category="PDF" data-rating="4.6">
+
+<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png">
+
+<h3>SmallPDF</h3>
+
+<p class="category">PDF Tools</p>
+
+<div class="rating">⭐⭐⭐⭐</div>
+
+<p>Convert, compress and edit PDF files.</p>
+
+<a href="https://chat.openai.com" target="_blank" class="tool-btn">
+View Tool
+</a>
+
+</div>
+
+
+<!-- TOOL CARD -->
+
+<div class="tool-card" data-category="Image" data-rating="4.5">
+
+<img src="https://cdn-icons-png.flaticon.com/512/1829/1829586.png">
+
+<h3>RemoveBG</h3>
+
+<p class="category">Image Tools</p>
+
+<div class="rating">⭐⭐⭐⭐</div>
+
+<p>Remove image background automatically.</p>
+
+<a href="https://chat.openai.com" target="_blank" class="tool-btn">
+View Tool
+</a>
+
+</div>
+
+
+<!-- TOOL CARD -->
+
+<div class="tool-card" data-category="Developer" data-rating="4.7">
+
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111501.png">
+
+<h3>CodePen</h3>
+
+<p class="category">Developer Tools</p>
+
+<div class="rating">⭐⭐⭐⭐⭐</div>
+
+<p>Online code editor for frontend developers.</p>
+
+<a href="https://chat.openai.com" target="_blank" class="tool-btn">
+View Tool
+</a>
+
+</div>
+
+
+</section>
+
+<footer>
+<p>Welcome to <strong>Tool Kit.</strong>
+Tool Kit is a collection of free online tools.
+Use <strong>Tool Kit</strong> to convert images, PDFs and more.
+</p>
+
+<p>© 2026 ToolHub</p>
+
+</footer>
+
+<script src="script.js"></script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBGYvBG_sfYAeVmjpTug1wEQ9pvCay13YQ",
+  authDomain: "tool-directory-955fb.firebaseapp.com",
+  projectId: "tool-directory-955fb",
+  storageBucket: "tool-directory-955fb.firebasestorage.app",
+  messagingSenderId: "365165106332",
+  appId: "1:365165106332:web:b47f240af7ea4ec3e10959",
+  measurementId: "G-HJH9MNY2F1"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
+
+const loginBtn = document.getElementById("googleLogin");
+const logoutBtn = document.getElementById("logoutBtn");
+const userBox = document.getElementById("userBox");
+
+
+loginBtn.onclick = () => {
+
+signInWithPopup(auth, provider)
+
+};
+
+
+logoutBtn.onclick = () => {
+
+signOut(auth)
+
+};
+
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+loginBtn.style.display="none";
+logoutBtn.style.display="inline-block";
+
+userBox.innerHTML =
+`<img src="${user.photoURL}" width="35" style="border-radius:50%"> ${user.displayName}`;
+
+}
+else{
+
+loginBtn.style.display="inline-block";
+logoutBtn.style.display="none";
+userBox.innerHTML="";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
